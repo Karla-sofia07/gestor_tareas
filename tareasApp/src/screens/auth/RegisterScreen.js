@@ -1,31 +1,54 @@
-import { useState, useContext } from "react";
-import { View, TextInput, Button, Alert } from "react-native";
-import { AuthContext } from "../../context/AuthContext";
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
 export default function RegisterScreen({ navigation }) {
-  const { register } = useContext(AuthContext);
-
-  const [form, setForm] = useState({ email: "", password: "" });
-
-  const handleRegister = async () => {
-    if (!form.email || !form.password) {
-      return Alert.alert("Campos requeridos");
-    }
-
-    try {
-      await register(form);
-      Alert.alert("Registrado");
-      navigation.navigate("Login");
-    } catch {
-      Alert.alert("Error en registro");
-    }
-  };
+  const [user, setUser] = useState('');
+  const [email, setEmail] = useState('');
+  const [pass, setPass] = useState('');
 
   return (
-    <View>
-      <TextInput placeholder="Email" onChangeText={(t) => setForm({ ...form, email: t })} />
-      <TextInput placeholder="Password" secureTextEntry onChangeText={(t) => setForm({ ...form, password: t })} />
-      <Button title="Registrar" onPress={handleRegister} />
+    <View style={styles.container}>
+      <Text style={styles.title}>Register user</Text>
+
+      <TextInput placeholder="User" style={styles.input} onChangeText={setUser}/>
+      <TextInput placeholder="Email" style={styles.input} onChangeText={setEmail}/>
+      <TextInput placeholder="Password" secureTextEntry style={styles.input} onChangeText={setPass}/>
+
+      <TouchableOpacity style={styles.button}>
+        <Text style={styles.buttonText}>REGISTER</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+        <Text style={styles.link}>BACK TO LOGIN</Text>
+      </TouchableOpacity>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: { flex: 1, justifyContent: 'center', padding: 20 },
+  title: { fontSize: 22, textAlign: 'center', marginBottom: 20 },
+
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 12,
+    borderRadius: 10,
+    marginBottom: 15
+  },
+
+  button: {
+    backgroundColor: '#4A6CF7',
+    padding: 15,
+    borderRadius: 10,
+    alignItems: 'center'
+  },
+
+  buttonText: { color: '#fff', fontWeight: 'bold' },
+
+  link: {
+    textAlign: 'center',
+    marginTop: 15,
+    color: '#4A6CF7'
+  }
+});

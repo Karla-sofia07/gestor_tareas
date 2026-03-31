@@ -1,35 +1,60 @@
-import { useEffect, useState } from "react";
-import { View, Text, Button, FlatList } from "react-native";
-import { getMaterias, deleteMateria } from "../../services/materiaService";
+import React, { useState } from 'react';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 export default function MateriasScreen({ navigation }) {
+
   const [materias, setMaterias] = useState([]);
 
-  const load = async () => {
-    const res = await getMaterias();
-    setMaterias(res.data);
-  };
-
-  useEffect(() => {
-    load();
-  }, []);
-
   return (
-    <View>
-      <Button title="Crear Materia" onPress={() => navigation.navigate("MateriaForm")} />
+    <View style={styles.container}>
 
       <FlatList
         data={materias}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.id}
+        ListEmptyComponent={<Text>No hay materias</Text>}
         renderItem={({ item }) => (
-          <View>
-            <Text>{item.nombre}</Text>
-            <Button title="Editar" onPress={() => navigation.navigate("MateriaForm", { materia: item })} />
-            <Button title="Eliminar" onPress={async () => { await deleteMateria(item.id); load(); }} />
-            <Button title="Ver tareas" onPress={() => navigation.navigate("Tareas", { materiaId: item.id })} />
+          <View style={styles.card}>
+            <Icon name="menu-book" size={22} color="#4A6CF7" />
+            <Text style={{ marginLeft: 10 }}>{item.nombre}</Text>
           </View>
         )}
       />
+
+      <TouchableOpacity 
+        style={styles.fab}
+        onPress={() => navigation.navigate('CrearMateria', { materias, setMaterias })}
+      >
+        <Icon name="add" size={30} color="#fff" />
+      </TouchableOpacity>
+
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 20 },
+
+  card: {
+    backgroundColor: '#fff',
+    padding: 15,
+    borderRadius: 15,
+    marginBottom: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    elevation: 3
+  },
+
+  fab: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    backgroundColor: '#4A6CF7',
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 5
+  }
+});

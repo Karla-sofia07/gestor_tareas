@@ -1,39 +1,33 @@
-import { useEffect, useState } from "react";
-import { View, Text, Button, FlatList } from "react-native";
-import { getTareas, deleteTarea, completeTarea } from "../../services/tareaService";
+import React, { useState } from 'react';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
-export default function TareasScreen({ route, navigation }) {
-  const { materiaId } = route.params;
+export default function TareasScreen({ navigation }) {
+
   const [tareas, setTareas] = useState([]);
 
-  const load = async () => {
-    const res = await getTareas();
-    const filtradas = res.data.filter(t => t.materia_id === materiaId);
-    setTareas(filtradas);
-  };
-
-  useEffect(() => {
-    load();
-  }, []);
-
   return (
-    <View>
-      <Button title="Crear tarea" onPress={() => navigation.navigate("TareaForm", { materiaId })} />
+    <View style={styles.container}>
 
       <FlatList
         data={tareas}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.id}
+        ListEmptyComponent={<Text>No hay tareas</Text>}
         renderItem={({ item }) => (
-          <View>
-            <Text>{item.titulo}</Text>
-            <Text>{item.estado}</Text>
-
-            <Button title="Completar" onPress={async () => { await completeTarea(item.id); load(); }} />
-            <Button title="Editar" onPress={() => navigation.navigate("TareaForm", { tarea: item })} />
-            <Button title="Eliminar" onPress={async () => { await deleteTarea(item.id); load(); }} />
+          <View style={styles.card}>
+            <Icon name="assignment" size={22} color="#FF8C42" />
+            <Text style={{ marginLeft: 10 }}>{item.titulo}</Text>
           </View>
         )}
       />
+
+      <TouchableOpacity 
+        style={styles.fab}
+        onPress={() => navigation.navigate('CrearTarea', { tareas, setTareas })}
+      >
+        <Icon name="add" size={30} color="#fff" />
+      </TouchableOpacity>
+
     </View>
   );
 }

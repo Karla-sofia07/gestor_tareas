@@ -1,26 +1,35 @@
-import { useState } from "react";
-import { View, TextInput, Button } from "react-native";
-import { createTarea, updateTarea } from "../../services/tareaService";
+import React, { useState } from 'react';
+import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
 
-export default function TareaFormScreen({ route, navigation }) {
-  const tarea = route.params?.tarea;
-  const materiaId = route.params?.materiaId;
+export default function TareaForm({ route, navigation }) {
 
-  const [titulo, setTitulo] = useState(tarea?.titulo || "");
-
-  const handleSave = async () => {
-    if (tarea) {
-      await updateTarea(tarea.id, { titulo });
-    } else {
-      await createTarea({ titulo, materia_id: materiaId });
-    }
-    navigation.goBack();
-  };
+  const { tareas, setTareas } = route.params;
+  const [titulo, setTitulo] = useState('');
 
   return (
-    <View>
-      <TextInput value={titulo} onChangeText={setTitulo} placeholder="Título" />
-      <Button title="Guardar" onPress={handleSave} />
+    <View style={styles.container}>
+
+      <TextInput 
+        placeholder="Título de la tarea" 
+        style={styles.input}
+        onChangeText={setTitulo}
+      />
+
+      <TouchableOpacity 
+        style={styles.button}
+        onPress={() => {
+          const nueva = {
+            id: Date.now().toString(),
+            titulo
+          };
+
+          setTareas([...tareas, nueva]);
+          navigation.goBack();
+        }}
+      >
+        <Text style={styles.buttonText}>Crear</Text>
+      </TouchableOpacity>
+
     </View>
   );
 }

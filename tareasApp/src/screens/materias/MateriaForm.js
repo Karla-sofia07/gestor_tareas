@@ -1,54 +1,36 @@
 import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
 
-export default function MateriaForm({ route, navigation }) {
-
-  const { materias, setMaterias } = route.params;
+export default function MateriaForm({ navigation }) {
   const [nombre, setNombre] = useState('');
+  const [desc, setDesc] = useState('');
 
   return (
     <View style={styles.container}>
+      <TextInput placeholder="Nombre de la materia" style={styles.input} onChangeText={setNombre}/>
+      <TextInput placeholder="Descripción" style={styles.input} onChangeText={setDesc}/>
 
-      <TextInput 
-        placeholder="Nombre de la materia" 
-        style={styles.input}
-        onChangeText={setNombre}
-      />
-
-      <TouchableOpacity 
-        style={styles.button}
-        onPress={() => {
-          const nueva = {
-            id: Date.now().toString(),
-            nombre
-          };
-
-          setMaterias([...materias, nueva]);
-          navigation.goBack();
-        }}
-      >
+      <TouchableOpacity style={styles.button}>
         <Text style={styles.buttonText}>Crear</Text>
       </TouchableOpacity>
-
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 25 },
+  container: { flex: 1, padding: 20 },
 
   input: {
     borderWidth: 1,
-    borderColor: '#ddd',
-    padding: 15,
-    borderRadius: 12,
-    marginBottom: 20
+    padding: 12,
+    borderRadius: 10,
+    marginBottom: 15
   },
 
   button: {
     backgroundColor: '#4A6CF7',
     padding: 15,
-    borderRadius: 12,
+    borderRadius: 10,
     alignItems: 'center'
   },
 

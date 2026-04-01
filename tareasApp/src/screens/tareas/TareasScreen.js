@@ -1,33 +1,54 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 
 export default function TareasScreen({ navigation }) {
 
-  const [tareas, setTareas] = useState([]);
+  const tareas = [
+    { id: '1', titulo: 'Tarea 1', estado: 'Pendiente' },
+    { id: '2', titulo: 'Tarea 2', estado: 'Completada' }
+  ];
 
   return (
     <View style={styles.container}>
-
       <FlatList
         data={tareas}
         keyExtractor={(item) => item.id}
-        ListEmptyComponent={<Text>No hay tareas</Text>}
         renderItem={({ item }) => (
           <View style={styles.card}>
-            <Icon name="assignment" size={22} color="#FF8C42" />
-            <Text style={{ marginLeft: 10 }}>{item.titulo}</Text>
+            <Text>{item.titulo}</Text>
+            <Text>{item.estado}</Text>
           </View>
         )}
       />
 
-      <TouchableOpacity 
-        style={styles.fab}
-        onPress={() => navigation.navigate('CrearTarea', { tareas, setTareas })}
-      >
-        <Icon name="add" size={30} color="#fff" />
+      <TouchableOpacity style={styles.fab} onPress={() => navigation.navigate('CrearTarea')}>
+        <Text style={styles.fabText}>+</Text>
       </TouchableOpacity>
-
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 15 },
+
+  card: {
+    padding: 15,
+    backgroundColor: '#eee',
+    borderRadius: 10,
+    marginBottom: 10
+  },
+
+  fab: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    backgroundColor: '#4A6CF7',
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
+  fabText: { color: '#fff', fontSize: 24 }
+});

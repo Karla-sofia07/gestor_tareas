@@ -1,48 +1,40 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 
 export default function MateriasScreen({ navigation }) {
 
-  const [materias, setMaterias] = useState([]);
+  const materias = [
+    { id: '1', nombre: 'Programación' },
+    { id: '2', nombre: 'Redes' }
+  ];
 
   return (
     <View style={styles.container}>
-
       <FlatList
         data={materias}
         keyExtractor={(item) => item.id}
-        ListEmptyComponent={<Text>No hay materias</Text>}
         renderItem={({ item }) => (
           <View style={styles.card}>
-            <Icon name="menu-book" size={22} color="#4A6CF7" />
-            <Text style={{ marginLeft: 10 }}>{item.nombre}</Text>
+            <Text>{item.nombre}</Text>
           </View>
         )}
       />
 
-      <TouchableOpacity 
-        style={styles.fab}
-        onPress={() => navigation.navigate('CrearMateria', { materias, setMaterias })}
-      >
-        <Icon name="add" size={30} color="#fff" />
+      <TouchableOpacity style={styles.fab} onPress={() => navigation.navigate('CrearMateria')}>
+        <Text style={styles.fabText}>+</Text>
       </TouchableOpacity>
-
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20 },
+  container: { flex: 1, padding: 15 },
 
   card: {
-    backgroundColor: '#fff',
     padding: 15,
-    borderRadius: 15,
-    marginBottom: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    elevation: 3
+    backgroundColor: '#eee',
+    borderRadius: 10,
+    marginBottom: 10
   },
 
   fab: {
@@ -54,7 +46,8 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 30,
     justifyContent: 'center',
-    alignItems: 'center',
-    elevation: 5
-  }
+    alignItems: 'center'
+  },
+
+  fabText: { color: '#fff', fontSize: 24 }
 });

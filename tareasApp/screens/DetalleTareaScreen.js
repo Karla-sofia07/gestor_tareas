@@ -1,13 +1,17 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-const DetalleTareaScreen = () => {
+const DetalleTareaScreen = ({ route }) => {
+  const { tarea } = route.params;
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Detalle de Tarea</Text>
-      <Text>Título: Ejemplo</Text>
-      <Text>Descripción: Lorem ipsum</Text>
-      <Text>Estado: Pendiente</Text>
+      <Text style={styles.title}>{tarea.titulo}</Text>
+      <Text>{tarea.descripcion}</Text>
+      <Text>📅 {tarea.fecha_entrega}</Text>
+      <Text>📚 {tarea.materia}</Text>
+      <Text>⚡ {tarea.prioridad}</Text>
+      <Text>📌 {tarea.estado}</Text>
     </View>
   );
 };

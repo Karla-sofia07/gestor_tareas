@@ -1,0 +1,196 @@
+import React, { useState } from 'react';
+import { Ionicons } from '@expo/vector-icons';
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+  Alert
+} from 'react-native';
+
+const RegisterScreen = ({ navigation }) => {
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  const [error, setError] = useState('');
+
+  // 🔍 Validación en tiempo real
+  const validatePasswords = () => {
+    if (confirmPassword && password !== confirmPassword) {
+      setError('Las contraseñas no coinciden');
+    } else {
+      setError('');
+    }
+  };
+
+  const handleRegister = () => {
+    if (!username || !email || !password || !confirmPassword) {
+      Alert.alert('Error', 'Todos los campos son obligatorios');
+      return;
+    }
+
+    if (!email.includes('@')) {
+      Alert.alert('Error', 'Email inválido');
+      return;
+    }
+
+    if (password.length < 6) {
+      Alert.alert('Error', 'Mínimo 6 caracteres en contraseña');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      Alert.alert('Error', 'Las contraseñas no coinciden');
+      return;
+    }
+
+    // 🚀 Simulación
+    Alert.alert('Registro', 'Cuenta creada exitosamente');
+
+    // Regresar a login
+    navigation.navigate('Login');
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Register user</Text>
+
+      {/* Avatar */}
+      <View style={styles.avatar}>
+        <Ionicons name="person" size={60} color="#fff" />
+      </View>
+
+      {/* Card */}
+      <View style={styles.card}>
+        <TextInput
+          placeholder="Username"
+          placeholderTextColor="#999"
+          style={styles.input}
+          value={username}
+          onChangeText={setUsername}
+        />
+
+        <TextInput
+          placeholder="Email"
+          placeholderTextColor="#999"
+          style={styles.input}
+          value={email}
+          onChangeText={setEmail}
+        />
+
+        <TextInput
+          placeholder="Password"
+          placeholderTextColor="#999"
+          style={styles.input}
+          secureTextEntry
+          value={password}
+          onChangeText={(text) => {
+            setPassword(text);
+            validatePasswords();
+          }}
+        />
+
+        <TextInput
+          placeholder="Confirm password"
+          placeholderTextColor="#999"
+          style={styles.input}
+          secureTextEntry
+          value={confirmPassword}
+          onChangeText={(text) => {
+            setConfirmPassword(text);
+            validatePasswords();
+          }}
+        />
+
+        {/* ⚠️ Error en tiempo real */}
+        {error ? <Text style={styles.error}>{error}</Text> : null}
+
+        <TouchableOpacity style={styles.button} onPress={handleRegister}>
+          <Text style={styles.buttonText}>CREATE ACCOUNT</Text>
+        </TouchableOpacity>
+
+        {/* Navegación */}
+        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+          <Text style={styles.link}>
+            Already have an account? Login
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
+
+export default RegisterScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#3b6edc',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+
+  title: {
+    fontSize: 24,
+    color: '#fff',
+    marginBottom: 25,
+    fontWeight: '600'
+  },
+
+  avatar: {
+    width: 110,
+    height: 110,
+    borderRadius: 55,
+    backgroundColor: '#000',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: -55,
+    zIndex: 1,
+    elevation: 5
+  },
+
+  card: {
+    width: '85%',
+    backgroundColor: '#0d2c6b',
+    padding: 25,
+    alignItems: 'center',
+    borderRadius: 10
+  },
+
+  input: {
+    width: '100%',
+    backgroundColor: '#d9d9d9',
+    padding: 12,
+    marginBottom: 15,
+    borderRadius: 5
+  },
+
+  error: {
+    color: '#ff4d4d',
+    marginBottom: 10,
+    fontSize: 12
+  },
+
+  button: {
+    backgroundColor: '#1fa4c7',
+    paddingVertical: 12,
+    paddingHorizontal: 30,
+    borderRadius: 5
+  },
+
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    letterSpacing: 1
+  },
+
+  link: {
+    color: '#fff',
+    marginTop: 15,
+    fontSize: 12,
+    textDecorationLine: 'underline'
+  }
+});

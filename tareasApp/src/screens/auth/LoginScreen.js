@@ -1,62 +1,107 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet
+} from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function LoginScreen({ navigation }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [user, setUser] = useState('');
+  const [pass, setPass] = useState('');
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Member login</Text>
+    <LinearGradient colors={['#3B5BDB', '#5C7CFA']} style={styles.container}>
 
-      <TextInput
-        placeholder="Username"
-        style={styles.input}
-        onChangeText={setEmail}
-      />
+      <Text style={styles.logo}>👤</Text>
 
-      <TextInput
-        placeholder="Password"
-        secureTextEntry
-        style={styles.input}
-        onChangeText={setPassword}
-      />
+      <View style={styles.card}>
+        <Text style={styles.title}>Member login</Text>
 
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>LOGIN</Text>
-      </TouchableOpacity>
+        <TextInput
+          placeholder="Username"
+          style={styles.input}
+          onChangeText={setUser}
+        />
 
-      <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-        <Text style={styles.link}>CREATE ACCOUNT</Text>
-      </TouchableOpacity>
-    </View>
+        <TextInput
+          placeholder="Password"
+          style={styles.input}
+          secureTextEntry
+          onChangeText={setPass}
+        />
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.replace('Home')}
+        >
+          <Text style={styles.buttonText}>LOGIN</Text>
+        </TouchableOpacity>
+
+        <Text
+          style={styles.link}
+          onPress={() => navigation.navigate('Register')}
+        >
+          CREATE ACCOUNT
+        </Text>
+      </View>
+
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', padding: 20 },
-  title: { fontSize: 22, textAlign: 'center', marginBottom: 20 },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  logo: {
+    fontSize: 60,
+    marginBottom: 20,
+  },
+
+  card: {
+    width: '85%',
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 20,
+    elevation: 5,
+  },
+
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 15,
+  },
 
   input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
+    backgroundColor: '#F1F5F9',
     padding: 12,
     borderRadius: 10,
-    marginBottom: 15
+    marginBottom: 10,
   },
 
   button: {
-    backgroundColor: '#4A6CF7',
+    backgroundColor: '#3B5BDB',
     padding: 15,
     borderRadius: 10,
-    alignItems: 'center'
+    alignItems: 'center',
+    marginTop: 10,
   },
 
-  buttonText: { color: '#fff', fontWeight: 'bold' },
+  buttonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
 
   link: {
     textAlign: 'center',
-    marginTop: 15,
-    color: '#4A6CF7'
+    marginTop: 10,
+    color: '#3B5BDB',
   }
 });

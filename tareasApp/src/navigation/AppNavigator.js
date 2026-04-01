@@ -6,7 +6,7 @@ import LoginScreen from '../screens/auth/LoginScreen';
 import RegisterScreen from '../screens/auth/RegisterScreen';
 
 // HOME
-import HomeScreen from '../screens/HomeScreen';
+import HomeScreen from '../screens/home/HomeScreen';
 
 // MATERIAS
 import MateriasScreen from '../screens/materias/MateriasScreen';
@@ -22,18 +22,13 @@ export default function AppNavigator() {
   return (
     <Stack.Navigator initialRouteName="Login">
 
-      {/* AUTH */}
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Register" component={RegisterScreen} />
-
-      {/* HOME */}
       <Stack.Screen name="Home" component={HomeScreen} />
 
-      {/* MATERIAS */}
       <Stack.Screen name="Materias" component={MateriasScreen} />
       <Stack.Screen name="MateriaForm" component={MateriaForm} />
 
-      {/* TAREAS */}
       <Stack.Screen name="Tareas" component={TareasScreen} />
       <Stack.Screen name="TareaForm" component={TareaForm} />
 

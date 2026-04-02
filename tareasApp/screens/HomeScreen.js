@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
@@ -6,10 +6,28 @@ import {
   TouchableOpacity
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { SafeAreaView } from 'react-native';
+
+const API_URL = 'http://192.168.100.63:3000/tareas'; // pon tu IP
 
 const HomeScreen = ({ navigation }) => {
+
+  const getTareas = async () => {
+    try {
+      const res = await fetch(API_URL);
+      const data = await res.json();
+      console.log('🔥 Tareas desde backend:', data);
+    } catch (error) {
+      console.log('❌ Error al obtener tareas:', error);
+    }
+  };
+
+  useEffect(() => {
+    getTareas();
+  }, []);
+
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       
       {/* 🔷 HEADER */}
       <View style={styles.header}>
@@ -86,7 +104,7 @@ const HomeScreen = ({ navigation }) => {
 
       </View>
 
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -101,10 +119,7 @@ const MenuItem = ({ icon, text, onPress }) => (
 export default HomeScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f2f2f2'
-  },
+  container: { flex: 1, backgroundColor: '#f2f2f2' },
 
   header: {
     backgroundColor: '#3b6edc',
@@ -116,15 +131,9 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
 
-  headerTitle: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '600'
-  },
+  headerTitle: { color: '#fff', fontSize: 18, fontWeight: '600' },
 
-  menu: {
-    padding: 15
-  },
+  menu: { padding: 15 },
 
   item: {
     flexDirection: 'row',
@@ -136,42 +145,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
 
-  itemText: {
-    flex: 1,
-    marginLeft: 10,
-    fontSize: 14
-  },
+  itemText: { flex: 1, marginLeft: 10, fontSize: 14 },
 
-  actions: {
-    marginTop: 'auto',
-    padding: 20
-  },
+  actions: { marginTop: 'auto', padding: 20 },
 
-  btnMaterias: {
-    backgroundColor: '#3b2ca0',
-    padding: 15,
-    borderRadius: 25,
-    marginBottom: 10,
-    alignItems: 'center'
-  },
-
-  btnTareas: {
-    backgroundColor: '#f06c0c',
-    padding: 15,
-    borderRadius: 25,
-    marginBottom: 10,
-    alignItems: 'center'
-  },
-
-  btnCrearTarea: {
-    backgroundColor: '#20c997',
-    padding: 15,
-    borderRadius: 25,
-    alignItems: 'center'
-  },
-
-  btnText: {
-    color: '#fff',
-    fontWeight: 'bold'
-  }
+  btnMaterias: { backgroundColor: '#3b2ca0', padding: 15, borderRadius: 25, marginBottom: 10, alignItems: 'center' },
+  btnTareas: { backgroundColor: '#f06c0c', padding: 15, borderRadius: 25, marginBottom: 10, alignItems: 'center' },
+  btnCrearTarea: { backgroundColor: '#20c997', padding: 15, borderRadius: 25, alignItems: 'center' },
+  btnText: { color: '#fff', fontWeight: 'bold' }
 });

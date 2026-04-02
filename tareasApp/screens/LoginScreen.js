@@ -6,16 +6,24 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
-  Alert
+  Alert,
+  ActivityIndicator
 } from 'react-native';
+import { login } from '../services/api';
 
 const LoginScreen = ({ navigation }) => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = () => {
-    if (!username || !password) {
+  const handleLogin = async () => {
+    if (!email || !password) {
       Alert.alert('Error', 'Todos los campos son obligatorios');
+      return;
+    }
+
+    if (!email.includes('@')) {
+      Alert.alert('Error', 'Email inválido');
       return;
     }
 
@@ -24,26 +32,35 @@ const LoginScreen = ({ navigation }) => {
       return;
     }
 
-    navigation.navigate('Home');
+    setLoading(true);
+    try {
+      const usuario = await login(email, password);
+      console.log('✅ Usuario logueado:', usuario);
+      navigation.navigate('Home');
+    } catch (error) {
+      Alert.alert('Error', error.message || 'Credenciales incorrectas');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Member login</Text>
 
-      {/* Avatar */}
       <View style={styles.avatar}>
         <Ionicons name="person" size={60} color="#fff" />
       </View>
 
-      {/* Card */}
       <View style={styles.card}>
         <TextInput
-          placeholder="Username"
+          placeholder="Email"
           placeholderTextColor="#999"
           style={styles.input}
-          value={username}
-          onChangeText={setUsername}
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
         />
 
         <TextInput
@@ -56,19 +73,18 @@ const LoginScreen = ({ navigation }) => {
         />
 
         <View style={styles.options}>
-          <Text style={styles.optionText}>Remember me</Text>
           <Text style={styles.optionText}>Forgot password?</Text>
         </View>
 
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          <Text style={styles.buttonText}>LOGIN</Text>
+        <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
+          {loading
+            ? <ActivityIndicator color="#fff" />
+            : <Text style={styles.buttonText}>LOGIN</Text>
+          }
         </TouchableOpacity>
 
-        {/* Navegación */}
         <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-          <Text style={styles.link}>
-            Don't have an account? Register
-          </Text>
+          <Text style={styles.link}>Don't have an account? Register</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -84,14 +100,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-
   title: {
     fontSize: 24,
     color: '#fff',
     marginBottom: 25,
     fontWeight: '600'
   },
-
   avatar: {
     width: 110,
     height: 110,
@@ -103,7 +117,6 @@ const styles = StyleSheet.create({
     zIndex: 1,
     elevation: 5
   },
-
   card: {
     width: '85%',
     backgroundColor: '#0d2c6b',
@@ -111,7 +124,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 10
   },
-
   input: {
     width: '100%',
     backgroundColor: '#d9d9d9',
@@ -119,31 +131,27 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     borderRadius: 5
   },
-
   options: {
     width: '100%',
     marginBottom: 20
   },
-
   optionText: {
     color: '#fff',
-    fontSize: 12,
-    marginBottom: 3
+    fontSize: 12
   },
-
   button: {
     backgroundColor: '#1fa4c7',
     paddingVertical: 12,
     paddingHorizontal: 50,
-    borderRadius: 5
+    borderRadius: 5,
+    minWidth: 120,
+    alignItems: 'center'
   },
-
   buttonText: {
     color: '#fff',
     fontWeight: 'bold',
     letterSpacing: 1
   },
-
   link: {
     color: '#fff',
     marginTop: 15,

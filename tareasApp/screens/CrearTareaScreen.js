@@ -18,7 +18,7 @@ const CrearTareaScreen = ({ navigation }) => {
   const [prioridad, setPrioridad] = useState(null);
   const [materia, setMateria] = useState('');
 
-  const handleCrear = () => {
+  const handleCrear = async () => {
     if (!titulo || !fecha || !prioridad || !materia) {
       Alert.alert('Error', 'Completa todos los campos obligatorios');
       return;
@@ -29,8 +29,28 @@ const CrearTareaScreen = ({ navigation }) => {
       return;
     }
 
-    // 🚀 Aquí después irá conexión con backend
-    navigation.navigate('TareaSuccess');
+    try {
+      const nuevaTarea = {
+        titulo,
+        descripcion,
+        fecha_entrega: fecha,
+        id_materia: 1,
+        id_prioridad: prioridad === 'alta' ? 1 : prioridad === 'media' ? 2 : 3,
+        id_estado: 1
+      };
+
+      const resultado = await crearTarea(nuevaTarea);
+      console.log('🔍 RESULTADO:', JSON.stringify(resultado));
+
+      if (resultado) {
+        navigation.navigate('TareaSuccess');
+      } else {
+        Alert.alert('Error', 'No se pudo crear la tarea');
+      }
+    } catch (error) {
+      console.log('❌ Error al crear tarea:', error);
+      Alert.alert('Error', 'Ocurrió un error al guardar');
+    }
   };
 
   return (
@@ -38,11 +58,11 @@ const CrearTareaScreen = ({ navigation }) => {
 
       {/* 🔷 HEADER */}
       <View style={styles.header}>
-        <Ionicons 
-          name="arrow-back" 
-          size={24} 
-          color="#fff" 
-          onPress={() => navigation.goBack()} 
+        <Ionicons
+          name="arrow-back"
+          size={24}
+          color="#fff"
+          onPress={() => navigation.goBack()}
         />
         <Text style={styles.headerTitle}>Crear Tarea</Text>
         <Ionicons name="person-circle" size={30} color="#fff" />
@@ -117,8 +137,8 @@ const CrearTareaScreen = ({ navigation }) => {
           <Text style={styles.btnText}>Crear</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity 
-          style={styles.btnCancelar} 
+        <TouchableOpacity
+          style={styles.btnCancelar}
           onPress={() => navigation.goBack()}
         >
           <Text style={styles.btnText}>Cancelar</Text>
@@ -130,9 +150,6 @@ const CrearTareaScreen = ({ navigation }) => {
 };
 
 export default CrearTareaScreen;
-
-
-
 
 
 // 🔥 COMPONENTE DE PRIORIDAD
@@ -147,9 +164,6 @@ const PrioridadBtn = ({ label, color, value, selected, setSelected }) => (
     <Text style={styles.prioridadText}>{label}</Text>
   </TouchableOpacity>
 );
-
-
-
 
 
 // 🎨 ESTILOS
